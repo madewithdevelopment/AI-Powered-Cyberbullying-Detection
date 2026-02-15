@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CyberShield AI — Cyberbullying Detection Dashboard</title>
+    <meta name="description"
+        content="AI-powered cyberbullying and sarcasm detection dashboard built with BERT. Analyze messages for toxicity, sarcasm, and risk in real-time." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/static/style.css" />
+</head>
+
+<body>
+
+    <!-- ───── NAVBAR ───── -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-brand">
+            <span class="nav-icon">🛡️</span>
+            <span class="nav-title">CyberShield <span class="accent">AI</span></span>
+        </div>
+        <div class="nav-links">
+            <a href="#dashboard" class="nav-link active glow-target">Dashboard</a>
+            <a href="#analyze-section" class="nav-link glow-target">Analyze</a>
+            <a href="#platform-section" class="nav-link glow-target">🌐 Platforms</a>
+            <a href="#cyberhub-section" class="nav-link glow-target">🚨 Cyber Hub</a>
+            <a href="#chat-section" class="nav-link glow-target">Try Me</a>
+            <a href="#challenge-section" class="nav-link glow-target">Challenge</a>
+            <a href="#activity-section" class="nav-link glow-target">Activity</a>
+        </div>
+    </nav>
+
+    <!-- ───── HERO / STATS ───── -->
+    <section id="dashboard" class="hero">
+        <div class="hero-text">
+            <h1>AI-Powered <span class="accent">Cyberbullying</span> Detection</h1>
+            <p class="hero-sub">Real-time threat analysis with BERT · Sarcasm intelligence · Gen Z vibes only ✨</p>
+        </div>
+
+        <!-- Awareness Reel -->
+        <div class="awareness-reel" id="awareness-reel">
+            <div class="reel-track">
+                <div class="reel-slide">
+                    <span class="reel-stat">1 in 3</span>
+                    <span class="reel-label">teens face cyberbullying daily</span>
+                </div>
+                <div class="reel-slide">
+                    <span class="reel-stat">70%</span>
+                    <span class="reel-label">of students report seeing bullying online</span>
+                </div>
+                <div class="reel-slide">
+                    <span class="reel-stat">64%</span>
+                    <span class="reel-label">say it affects their ability to learn</span>
+                </div>
+                <div class="reel-slide">
+                    <span class="reel-stat">37%</span>
+                    <span class="reel-label">of cyberbullying involves sarcasm</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-card glow-target" id="stat-scanned">
+                <div class="stat-icon">📨</div>
+                <div class="stat-value" data-target="1284">0</div>
+                <div class="stat-label">Messages Scanned</div>
+            </div>
+            <div class="stat-card glow-target" id="stat-threats">
+                <div class="stat-icon">🚫</div>
+                <div class="stat-value" data-target="312">0</div>
+                <div class="stat-label">Threats Blocked</div>
+            </div>
+            <div class="stat-card glow-target" id="stat-accuracy">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-value accent" data-target="94" data-suffix="%">0%</div>
+                <div class="stat-label">Detection Accuracy</div>
+            </div>
+            <div class="stat-card glow-target" id="stat-kindness">
+                <div class="stat-icon">💚</div>
+                <div class="stat-value accent" id="kindness-overall" data-target="78" data-suffix="%">0%</div>
+                <div class="stat-label">Kindness Score</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ───── ANALYZE SECTION ───── -->
+    <section id="analyze-section" class="section">
+        <h2 class="section-heading">🔥 Roast Meter — Analyze a Message</h2>
+        <p class="section-sub">Drop any message and watch the AI roast… uh, <em>analyze</em> it 🎯</p>
+        <div class="analyze-grid">
+
+            <!-- Left: input -->
+            <div class="card glass glow-target">
+                <h3>Paste any message or chat</h3>
+                <textarea id="input-text" rows="5" placeholder='e.g., Wah kya genius hai tu 😂'></textarea>
+                <button id="analyze-btn" class="btn-primary glow-target">
+                    <span class="btn-text">⚡ Analyze Risk</span>
+                    <span class="btn-loader" hidden>
+                        <span class="spinner"></span> Reading the vibes…
+                    </span>
+                </button>
+                <div class="quick-tests">
+                    <span class="label">Quick tests:</span>
+                    <button class="chip glow-target" data-text="Great job, loser 😏">Great job, loser 😏</button>
+                    <button class="chip glow-target" data-text="You are so smart 😂">You are so smart 😂</button>
+                    <button class="chip glow-target" data-text="Nice photo, proud of you!">Nice photo, proud of
+                        you!</button>
+                    <button class="chip glow-target" data-text="You are useless and stupid">You are useless and
+                        stupid</button>
+                    <button class="chip glow-target" data-text="Wah kya genius hai tu 🙄">Wah kya genius hai tu
+                        🙄</button>
+                </div>
+            </div>
+
+            <!-- Right: results -->
+            <div class="card glass glow-target" id="results-card">
+                <h3>Results</h3>
+                <div id="results-placeholder" class="results-placeholder">
+                    <div class="placeholder-icon">🛡️</div>
+                    <p>Enter a message and hit <strong>Analyze</strong> to see the vibes ✨</p>
+                </div>
+                <div id="results-content" class="results-content" hidden>
+
+                    <!-- Roast Meter (5 levels) -->
+                    <div class="roast-meter" id="roast-meter">
+                        <div class="roast-bar-track">
+                            <div class="roast-bar-fill" id="roast-bar-fill"></div>
+                            <div class="roast-needle" id="roast-needle"></div>
+                        </div>
+                        <div class="roast-labels">
+                            <span class="rl" data-level="safe">🔵 Safe</span>
+                            <span class="rl" data-level="sarcastic">🟡 Sarcastic</span>
+                            <span class="rl" data-level="risky">🟠 Risky</span>
+                            <span class="rl" data-level="toxic">🔴 Toxic</span>
+                            <span class="rl" data-level="ultra">💀 Ultra</span>
+                        </div>
+                    </div>
+
+                    <!-- Meme reaction -->
+                    <div class="meme-box" id="meme-box">
+                        <span class="meme-icon" id="meme-mood"></span>
+                        <span class="meme-text" id="meme-text"></span>
+                    </div>
+
+                    <!-- Risk gauge -->
+                    <div class="risk-gauge" id="risk-gauge">
+                        <div class="gauge-ring">
+                            <svg viewBox="0 0 120 120">
+                                <circle class="gauge-bg" cx="60" cy="60" r="52" />
+                                <circle class="gauge-fill" cx="60" cy="60" r="52" id="gauge-circle" />
+                            </svg>
+                            <div class="gauge-label" id="gauge-label">0%</div>
+                        </div>
+                        <div class="risk-level" id="risk-level">—</div>
+                    </div>
+
+                    <!-- Score bars -->
+                    <div class="score-bars">
+                        <div class="score-bar-group">
+                            <div class="score-bar-label">
+                                <span>😏 Sarcasm Score</span>
+                                <span class="accent" id="sarcasm-pct">0%</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill sarcasm" id="sarcasm-bar"></div>
+                            </div>
+                        </div>
+                        <div class="score-bar-group">
+                            <div class="score-bar-label">
+                                <span>☠️ Toxicity Score</span>
+                                <span class="accent" id="toxicity-pct">0%</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill toxicity" id="toxicity-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Explanation -->
+                    <div class="explanation-box" id="explanation-box">
+                        <span id="mood-icon">🙂</span>
+                        <span id="explanation-text">—</span>
+                    </div>
+
+                    <!-- Mood Flip -->
+                    <div class="mood-flip-box" id="mood-flip-box" hidden>
+                        <h4>🎭 Mood Flip — Rewritten with kindness</h4>
+                        <p id="polite-rewrite"></p>
+                    </div>
+
+                    <!-- Mental Health -->
+                    <div class="mental-health-box" id="mental-health-box" hidden>
+                        <span class="mh-icon">💙</span>
+                        <span id="mental-health-text"></span>
+                    </div>
+
+                    <!-- Anonymous Report -->
+                    <button class="btn-report glow-target" id="report-btn" hidden>
+                        🛡 Report Anonymously
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ───── KINDNESS SCORE DASHBOARD ───── -->
+    <section id="kindness-section" class="section">
+        <h2 class="section-heading">🧠 Your Kindness Score</h2>
+        <p class="section-sub">Track your digital empathy. Be the main character, not the villain ⚔️</p>
+        <div class="kindness-grid">
+            <div class="kindness-card glass glow-target">
+                <div class="kindness-icon">🧠</div>
+                <h4>Empathy Level</h4>
+                <div class="kindness-ring">
+                    <svg viewBox="0 0 80 80">
+                        <circle class="k-ring-bg" cx="40" cy="40" r="34" />
+                        <circle class="k-ring-fill empathy-ring" cx="40" cy="40" r="34" id="empathy-ring" />
+                    </svg>
+                    <span class="k-ring-label" id="empathy-label">—</span>
+                </div>
+            </div>
+            <div class="kindness-card glass glow-target">
+                <div class="kindness-icon">💬</div>
+                <h4>Respect Index</h4>
+                <div class="kindness-ring">
+                    <svg viewBox="0 0 80 80">
+                        <circle class="k-ring-bg" cx="40" cy="40" r="34" />
+                        <circle class="k-ring-fill respect-ring" cx="40" cy="40" r="34" id="respect-ring" />
+                    </svg>
+                    <span class="k-ring-label" id="respect-label">—</span>
+                </div>
+            </div>
+            <div class="kindness-card glass glow-target">
+                <div class="kindness-icon">⚡</div>
+                <h4>Toxicity Risk</h4>
+                <div class="kindness-ring">
+                    <svg viewBox="0 0 80 80">
+                        <circle class="k-ring-bg" cx="40" cy="40" r="34" />
+                        <circle class="k-ring-fill risk-ring-vis" cx="40" cy="40" r="34" id="toxicity-risk-ring" />
+                    </svg>
+                    <span class="k-ring-label" id="toxicity-risk-label">—</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ───── CHAT SIMULATION ───── -->
+    <section id="chat-section" class="section">
+        <h2 class="section-heading">💬 Try Bullying Me</h2>
+        <p class="section-sub">Go ahead, say something mean. I dare you. Let's see how the AI responds 🤖</p>
+        <div class="chat-container card glass">
+            <div class="chat-messages" id="chat-messages">
+                <div class="chat-msg bot">
+                    <span class="chat-avatar">🤖</span>
+                    <div class="chat-bubble">Hey! Try saying something — nice or mean — and I'll analyze the vibes in
+                        real-time. Let's go! 💬</div>
+                </div>
+            </div>
+            <div class="chat-input-row">
+                <input type="text" id="chat-input" class="chat-input" placeholder="Type something…" />
+                <button id="chat-send" class="btn-primary glow-target chat-send-btn">Send ➤</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ───── CHALLENGE MODE ───── -->
+    <section id="challenge-section" class="section">
+        <h2 class="section-heading">🎮 Positivity Challenge</h2>
+        <p class="section-sub">Can you turn this toxic comment into a positive one? Let's find out 💪</p>
+        <div class="challenge-container card glass glow-target">
+            <div class="challenge-prompt" id="challenge-prompt">
+                <span class="challenge-label">Toxic Comment:</span>
+                <p class="challenge-text" id="challenge-toxic-text">"You are so useless, just give up already."</p>
+            </div>
+            <div class="challenge-input-area">
+                <textarea id="challenge-input" rows="3" placeholder="Rewrite this in a positive way…"></textarea>
+                <button id="challenge-submit" class="btn-primary glow-target">✨ Check My Rewrite</button>
+            </div>
+            <div class="challenge-result" id="challenge-result" hidden>
+                <span class="challenge-feedback" id="challenge-feedback"></span>
+            </div>
+            <button class="btn-secondary glow-target" id="challenge-next">🔄 Next Challenge</button>
+        </div>
+    </section>
+
+    <!-- ───── RECENT ACTIVITY ───── -->
+    <section id="activity-section" class="section">
+        <h2 class="section-heading">📋 Recent Activity</h2>
+        <div class="card glass glow-target">
+            <div class="table-wrap">
+                <table id="activity-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Message</th>
+                            <th>Roast Level</th>
+                            <th>Sarcasm</th>
+                            <th>Toxicity</th>
+                            <th>Vibe Check</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activity-body">
+                        <tr id="empty-row">
+                            <td colspan="6" class="empty-cell">No scans yet — go analyze something! 🚀</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ───── PLATFORM MONITOR ───── -->
+    <section id="platform-section" class="section">
+        <h2 class="section-heading">🌐 Platform Monitor — Live Social Feed</h2>
+        <p class="section-sub">AI scans WhatsApp, Instagram & Twitter in real-time. Threats are auto-detected and acted upon 🛡️</p>
+
+        <!-- Platform Tabs -->
+        <div class="platform-tabs">
+            <button class="platform-tab active glow-target" data-platform="all">
+                <span class="tab-icon">🌍</span> All Platforms
+            </button>
+            <button class="platform-tab glow-target" data-platform="whatsapp">
+                <span class="tab-icon">💬</span> WhatsApp
+            </button>
+            <button class="platform-tab glow-target" data-platform="instagram">
+                <span class="tab-icon">📸</span> Instagram
+            </button>
+            <button class="platform-tab glow-target" data-platform="twitter">
+                <span class="tab-icon">🐦</span> Twitter
+            </button>
+        </div>
+
+        <!-- Scan Button + Stats -->
+        <div class="scan-bar">
+            <button id="scan-btn" class="btn-primary glow-target scan-btn">
+                <span class="btn-text">⚡ Scan All Platforms</span>
+                <span class="btn-loader" hidden>
+                    <span class="spinner"></span> Scanning feeds…
+                </span>
+            </button>
+            <div class="scan-stats" id="scan-stats" hidden>
+                <div class="scan-stat">
+                    <span class="scan-stat-value" id="scan-total">0</span>
+                    <span class="scan-stat-label">Scanned</span>
+                </div>
+                <div class="scan-stat">
+                    <span class="scan-stat-value threat-color" id="scan-threats">0</span>
+                    <span class="scan-stat-label">Threats</span>
+                </div>
+                <div class="scan-stat">
+                    <span class="scan-stat-value action-color" id="scan-actions">0</span>
+                    <span class="scan-stat-label">Auto Actions</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feed Container -->
+        <div class="feed-container" id="feed-container">
+            <div class="feed-placeholder" id="feed-placeholder">
+                <div class="placeholder-icon">🌐</div>
+                <p>Click <strong>Scan All Platforms</strong> to analyze social media feeds in real-time ⚡</p>
+            </div>
+            <div class="feed-list" id="feed-list" hidden></div>
+        </div>
+    </section>
+
+    <!-- ───── CYBER HUB ───── -->
+    <section id="cyberhub-section" class="section">
+        <h2 class="section-heading">🚨 Cyber Hub — Threat Reports</h2>
+        <p class="section-sub">Auto-generated reports from severe threats. Submitted to the National Cyber Crime Hub 🏛️</p>
+
+        <!-- Cyber Hub Stats -->
+        <div class="cyberhub-stats" id="cyberhub-stats">
+            <div class="ch-stat-card glass glow-target">
+                <div class="ch-stat-icon">📋</div>
+                <div class="ch-stat-value" id="ch-total">0</div>
+                <div class="ch-stat-label">Total Reports</div>
+            </div>
+            <div class="ch-stat-card glass glow-target critical-card">
+                <div class="ch-stat-icon">🔴</div>
+                <div class="ch-stat-value" id="ch-critical">0</div>
+                <div class="ch-stat-label">Critical</div>
+            </div>
+            <div class="ch-stat-card glass glow-target high-card">
+                <div class="ch-stat-icon">🟠</div>
+                <div class="ch-stat-value" id="ch-high">0</div>
+                <div class="ch-stat-label">High Priority</div>
+            </div>
+            <div class="ch-stat-card glass glow-target medium-card">
+                <div class="ch-stat-icon">🟡</div>
+                <div class="ch-stat-value" id="ch-medium">0</div>
+                <div class="ch-stat-label">Medium</div>
+            </div>
+        </div>
+
+        <!-- Reports List -->
+        <div class="cyberhub-reports" id="cyberhub-reports">
+            <div class="feed-placeholder" id="cyberhub-placeholder">
+                <div class="placeholder-icon">🛡️</div>
+                <p>No reports yet. Scan platforms to detect threats and auto-generate Cyber Hub reports.</p>
+            </div>
+            <div class="reports-list" id="reports-list" hidden></div>
+        </div>
+    </section>
+
+    <!-- ───── HOW IT WORKS ───── -->
+    <section id="about-section" class="section">
+        <h2 class="section-heading">🧠 How It Works</h2>
+        <div class="how-grid">
+            <div class="how-card glass glow-target">
+                <div class="how-icon">🤖</div>
+                <h4>BERT Toxicity Model</h4>
+                <p>Uses <strong>toxic-bert</strong> to classify harmful language with deep learning.</p>
+            </div>
+            <div class="how-card glass glow-target">
+                <div class="how-icon">🌐</div>
+                <h4>Platform Monitor</h4>
+                <p>Scans <strong>WhatsApp, Instagram & Twitter</strong> feeds for threats in real-time.</p>
+            </div>
+            <div class="how-card glass glow-target">
+                <div class="how-icon">🕵️</div>
+                <h4>Fraud & Fake Detection</h4>
+                <p>Detects <strong>phishing, scams, deepfakes</strong> and manipulated media automatically.</p>
+            </div>
+            <div class="how-card glass glow-target">
+                <div class="how-icon">⚡</div>
+                <h4>AI Auto-Actions</h4>
+                <p>AI <strong>blocks, flags, and reports</strong> threats to Cyber Hub without human delay.</p>
+            </div>
+            <div class="how-card glass glow-target">
+                <div class="how-icon">🚨</div>
+                <h4>Cyber Hub Reports</h4>
+                <p>Critical threats are auto-forwarded to the <strong>National Cyber Crime Hub</strong>.</p>
+            </div>
+            <div class="how-card glass glow-target">
+                <div class="how-icon">🎮</div>
+                <h4>Gamified Learning</h4>
+                <p>Challenge mode, kindness scores, and meme reactions make safety <strong>engaging</strong>.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ───── REPORT MODAL ───── -->
+    <div class="modal-overlay" id="report-modal">
+        <div class="modal card glass">
+            <h3>🛡 Anonymous Report</h3>
+            <p class="modal-sub">Your identity stays hidden. We've got your back.</p>
+            <textarea id="report-message" rows="3" placeholder="Paste the harmful message…"></textarea>
+            <textarea id="report-context" rows="2" placeholder="Any context? (optional)"></textarea>
+            <div class="modal-btns">
+                <button class="btn-primary glow-target" id="report-submit">Submit Report</button>
+                <button class="btn-secondary glow-target" id="report-cancel">Cancel</button>
+            </div>
+            <div id="report-success" class="report-success" hidden></div>
+        </div>
+    </div>
+
+    <!-- ───── FOOTER ───── -->
+    <footer class="footer">
+        <p>Built by <strong>PRACHI MISHRA</strong> · Galgotias University · Dextrix 5.0</p>
+        <p class="footer-sub">🛡️ CyberShield AI — Protecting conversations with intelligence</p>
+    </footer>
+
+    <script src="/static/script.js"></script>
+</body>
+
+</html>
