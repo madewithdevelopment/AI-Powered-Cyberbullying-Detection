@@ -94,7 +94,7 @@ Example:
 Input: "You are so useless and stupid."
 Output: 🚨 Cyberbullying Detected
 
-📊 Model Evaluation
+# 📊 Model Evaluation
 
 The model performance is evaluated using:
 
@@ -129,7 +129,7 @@ F1-Score: 89%
 
 🤝 Contributing
 
-Contributions are welcome!
+# Contributions are welcome!
 
 Fork the repository
 
@@ -141,7 +141,7 @@ Push to your branch
 
 Create a Pull Request
 
-📜 License
+# 📜 License
 
 This project is licensed under the MIT License.
 
